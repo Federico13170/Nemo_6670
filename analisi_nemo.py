@@ -20,12 +20,14 @@ class Star:
             return self.absolute_magnitude + 5 * math.log10(self.distance / 10)
         else:
             raise ValueError(f"Errore: La distanza della stella '{self.name}' deve essere maggiore di zero.")
-            
-    
-    def show_head(self, n=5):
-        """Mostra le prime n righe del file."""
-        print(self.data.head(n))
-
+    @classmethod
+    def from_dataframe(cls, df):
+        """Crea istanze di star da un DataFrame"""
+        stars = []
+        for _, row in df.iterrows():
+            try:
+                star = cls(
+                    name=f"Star_{int()}
     def show_info(self):
         """Mostra informazioni sul DataFrame."""
         print(self.data.info())
