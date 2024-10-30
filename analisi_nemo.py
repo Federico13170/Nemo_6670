@@ -20,6 +20,7 @@ class Star:
             return self.absolute_magnitude + 5 * math.log10(self.distance / 10)
         else:
             raise ValueError(f"Errore: La distanza della stella '{self.name}' deve essere maggiore di zero.")
+            
     
     def show_head(self, n=5):
         """Mostra le prime n righe del file."""
