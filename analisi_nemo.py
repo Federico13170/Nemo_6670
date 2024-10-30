@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-
+import math 
 import pandas as pd
+
+# --- Parte 1: Derfinizione della classe 
 
 class DataReader:
     def __init__(self, filepath):
