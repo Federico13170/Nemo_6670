@@ -1,41 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-
 import pandas as pd
 
-class DataReader:
-    def __init__(self, filepath):
-        """Costruttore che carica i dati dal file specificato."""
-        self.filepath = filepath
-        self.data = self._load_data()
+# --- PARTE 4: Creazione degli Intervalli di Età ---
 
-    def _load_data(self):
-        """Metodo privato per caricare i dati usando Pandas."""
-        if self.filepath.endswith('.csv'):
-            return pd.read_csv(self.filepath)
-        elif self.filepath.endswith('.xlsx'):
-            return pd.read_excel(self.filepath)
-        else:
-            raise ValueError("Formato file non supportato. Usa .csv o .xlsx")
+# Definisci il numero di bins
+Nbins = 30
 
-    def show_head(self, n=5):
-        """Mostra le prime n righe del file."""
-        print(self.data.head(n))
+# Crea i bins in base all'età
+data['age_bin'] = pd.cut(data['age_parent'], bins=Nbins)
+bins = pd.cut(data['age_parent'], bins=Nbins)
 
-    def show_info(self):
-        """Mostra informazioni sul DataFrame."""
-        print(self.data.info())
+# Crea una colormap
+cmap = plt.colormaps['viridis']
+marker_size = 10
 
-    def get_column(self, column_name):
-        """Ritorna i dati di una colonna specifica."""
-        if column_name in self.data.columns:
-            return self.data[column_name]
-        else:
-            raise ValueError(f"Colonna '{column_name}' non trovata nel file.")
+# Crea un color_map che usa l'indice del bin come chiave
+color_map = {i: cmap(i / (Nbins - 1)) for i in range(Nbins)}
 
-    def save_to_csv(self, output_path):
-        """Salva il DataFrame in un file CSV."""
-        self.data.to_csv(output_path, index=False)
-        print(f"Dati salvati in {output_path}")
+# --- PARTE 5: Diagramma di Dispersione ---
+
+plt.figure(figsize=(10, 6))
+for i, (bins_value, group) in enumerate(data.groupby(bins, observed=False)):
+    color = color_map[i]
+    plt.scatter(group['b_y'], group['M_ass'], 
+                label=f'Bins: {bins_value.left:.2f} to {bins_value.right:.2f}', 
+                color=color, alpha=0.8, s=marker_size)
+
+plt.legend()
+plt.title('Diagramma di Magnitudine Assoluta vs Età')
+plt.xlabel('b_y')
+plt.ylabel('Magnitudine Assoluta (M_sun)')
+plt.gca().invert_yaxis()
+plt.grid()
+plt.show()
 
