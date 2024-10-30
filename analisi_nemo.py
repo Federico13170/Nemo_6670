@@ -27,23 +27,56 @@ class Star:
         for _, row in df.iterrows():
             try:
                 star = cls(
-                    name=f"Star_{int()}
-    def show_info(self):
-        """Mostra informazioni sul DataFrame."""
-        print(self.data.info())
+                    name=f"Star_{int(row['ID_parent'])}",
+                    absolute_magnitude=row['m_app'],
+                    distance=row['dist']
+                )
+                stars.append(star)
+            except ValueError as e:
+                print(f"Errore per la stella con ID {row['ID_parent']}: {e}")
+        return stars
+    # --- PARTE 2: Caricamento dei Dati ---
 
-    def get_column(self, column_name):
-        """Ritorna i dati di una colonna specifica."""
-        if column_name in self.data.columns:
-            return self.data[column_name]
-        else:
-            raise ValueError(f"Colonna '{column_name}' non trovata nel file.")
+# Carica i dati
+data = pd.read_csv('Nemo_6670.txt', sep=r'\s+', comment='#', header=None)
 
-    def save_to_csv(self, output_path):
-        """Salva il DataFrame in un file CSV."""
-        self.data.to_csv(output_path, index=False)
-        print(f"Dati salvati in {output_path}")
-import pandas as pd
+# Imposta i nomi delle colonne
+data.columns = ['MsuH', 'm_ini', 'logL', 'logTe', 'M_ass', 'b_ass', 'y_ass', 'm_app', 'b_y', 'dist', 'abs_dist', 'ID_parent', 'age_parent']
+
+# Debugging: Stampa la forma e i nomi delle colonne
+print("Forma del DataFrame:", data.shape)
+print("Nomi delle colonne:", data.columns.tolist())
+print("Prime righe del DataFrame:")
+print(data.head())
+
+# Controllo dei valori NaN
+print("Valori NaN nelle colonne:")
+print(data.isna().sum())
+
+# Converti le colonne in tipi numerici
+numeric_columns = ['MsuH', 'm_ini', 'logL', 'logTe', 'M_ass', 'b_ass', 'y_ass', 'm_app', 'b_y', 'dist', 'abs_dist', 'ID_parent', 'age_parent']
+data[numeric_columns] = data[numeric_columns].apply(pd.to_numeric, errors='coerce')
+
+# Rimuovi le righe con NaN in M_ass o age_parent
+data = data.dropna(subset=['M_ass', 'age_parent'])
+
+# Rimuovi le righe con valori non validi in 'dist'
+data = data[data['dist'] > 0]
+
+# --- PARTE 3: Creazione degli Oggetti Star dal DataFrame ---
+
+stars = Star.from_dataframe(data)
+
+# Debug: Controllo se il numero di stelle corrisponde al numero di dati nel file
+print(f"Numero totale di stelle nel file: {len(data)}")
+print(f"Numero totale di stelle processate: {len(stars)}")
+
+# Mostra le magnitudini apparenti calcolate per le prime 5 stelle
+for star in stars[:5]:  
+    try:
+        print(f"{star.name} apparent magnitude: {star.apparent_magnitude:.2f}")
+    except ValueError as e:
+        print(e)
 
 # --- PARTE 4: Creazione degli Intervalli di Età ---
 
