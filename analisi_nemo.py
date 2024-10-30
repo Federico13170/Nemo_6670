@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import math 
 import pandas as pd
-gu
+#g
 # --- Parte 1: Derfinizione della classe 
 
 class Star:
