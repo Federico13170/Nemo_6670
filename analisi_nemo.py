@@ -6,7 +6,7 @@ import pandas as pd
 
 # Definisci il numero di bins
 Nbins = 30
-
+cacca
 # Crea i bins in base all'età
 data['age_bin'] = pd.cut(data['age_parent'], bins=Nbins)
 bins = pd.cut(data['age_parent'], bins=Nbins)
