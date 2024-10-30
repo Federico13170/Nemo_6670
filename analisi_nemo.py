@@ -6,11 +6,12 @@ import pandas as pd
 
 # --- Parte 1: Derfinizione della classe 
 
-class DataReader:
-    def __init__(self, filepath):
-        """Costruttore che carica i dati dal file specificato."""
-        self.filepath = filepath
-        self.data = self._load_data()
+class Star:
+    def __init__(self, name, absolute_magnitude, distance):
+        #"""Costruttore che carica i dati dal file specificato."""
+        self.name = name
+        self.absolute_magnitude = absolute_magnitude
+        self.distance = distance
 
     def _load_data(self):
         """Metodo privato per caricare i dati usando Pandas."""
