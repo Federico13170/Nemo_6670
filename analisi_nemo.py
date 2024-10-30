@@ -13,15 +13,14 @@ class Star:
         self.absolute_magnitude = absolute_magnitude
         self.distance = distance
 
-    def _load_data(self):
-        """Metodo privato per caricare i dati usando Pandas."""
-        if self.filepath.endswith('.csv'):
-            return pd.read_csv(self.filepath)
-        elif self.filepath.endswith('.xlsx'):
-            return pd.read_excel(self.filepath)
+    @property
+    def apparent_magnitude(self):
+        """ Calcolo la magnitudine apparente"""
+        if self.distance > 0:
+            return self.absolute_magnitude + 5 * math.log10(self.distance / 10)
         else:
-            raise ValueError("Formato file non supportato. Usa .csv o .xlsx")
-
+            raise ValueError(f"Errore: La distanza della stella '{self.name}' deve essere maggiore di zero.")
+    
     def show_head(self, n=5):
         """Mostra le prime n righe del file."""
         print(self.data.head(n))
